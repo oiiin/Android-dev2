@@ -13,23 +13,24 @@
 
             android:layout_width="match_parent"
             android:layout_height="match_parent">>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycleView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="417dp"
+                android:layout_height="626dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar"
                 app:layout_constraintVertical_bias="0.0">
 
             </androidx.recyclerview.widget.RecyclerView>
 
             <Button
                 android:id="@+id/sendButton"
-                android:layout_width="60dp"
-                android:layout_height="49dp"
+                android:layout_width="91dp"
+                android:layout_height="48dp"
                 android:text="SEND"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -46,12 +47,23 @@
 
             <Button
                 android:id="@+id/receiveButton"
-                android:layout_width="60dp"
+                android:layout_width="107dp"
                 android:layout_height="49dp"
                 android:text="RECEIVE"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.9"
                 app:layout_constraintStart_toEndOf="@+id/textInput" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="420dp"
+                android:layout_height="53dp"
+                android:background="?attr/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout> </FrameLayout>
 </LinearLayout>

@@ -1,12 +1,16 @@
 package algonquin.cst2335.myapplication.ui;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,12 +43,69 @@ public class ChatRoom extends AppCompatActivity {
     private RecyclerView.Adapter myAdapter;
     ChatRoomViewModel chatModel;
     ChatMessageDAO mDAO;
+    int position;
+
+
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch(item.getItemId())
+        {
+            case R.id.item_1:
+                TextView messageText;
+                messageText = findViewById(R.id.message);
+                AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
+                builder.setMessage("Do you want to delete this message: "+messageText);
+                builder.setTitle("Question:");
+                builder.setPositiveButton("Yes",(dialog, cl)->{
+                    ChatMessage m=messages.get(position);
+                    Executor thread = Executors.newSingleThreadExecutor();
+                    thread.execute(() ->
+                    {
+                        mDAO.deleteMessage(m);
+                    });
+
+                    messages.remove(position);
+                    myAdapter.notifyItemRemoved(position);
+
+                    Snackbar.make(messageText, "You deleted message #"+position, Snackbar.LENGTH_LONG)
+                            .setAction("Undo", undo->{
+
+                                thread.execute(() ->
+                                {
+                                    mDAO.insertMessage(m);
+                                });
+                                messages.add(position,m);
+                                myAdapter.notifyItemInserted(position);
+
+                            }).show();
+                });
+                builder.setNegativeButton("No",(dialog, cl)->{});
+                builder.create().show();
+            break;
+            case R.id.version:
+                Toast.makeText(this, "This is version 2.4.1", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.my_menu, menu);
+        return true;
+    }
+
+    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
+
         RecyclerView recycleView=binding.recycleView;
         Button sendButton=binding.sendButton;
         Button receiveButton=binding.receiveButton;
@@ -176,7 +239,7 @@ public class ChatRoom extends AppCompatActivity {
                 });
                 builder.setNegativeButton("No",(dialog, cl)->{});
                 builder.create().show();*/
-                int position = getAbsoluteAdapterPosition();
+                position = getAbsoluteAdapterPosition();
                 ChatMessage selected = messages.get(position);
 
                 chatModel.selectedMessage.postValue(selected);

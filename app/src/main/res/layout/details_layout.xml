@@ -10,8 +10,8 @@
         android:id="@+id/messageDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="37dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="100dp"
         android:text="Message"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
